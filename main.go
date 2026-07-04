@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"net"
+
+	"github.com/abh-i-navv/httpfromtcp/request"
 )
 
 func getLinesChannel(f io.ReadCloser) <-chan string {
@@ -59,9 +61,16 @@ func main() {
 
 		fmt.Println("connection accepted")
 
-		for line := range getLinesChannel(conn) {
-			fmt.Println(line)
+		r, err := request.RequestFromReader(conn)
+		if err != nil {
+			log.Fatal("error", "error", err)
 		}
+
+		fmt.Printf("Request line:\n")
+		fmt.Printf("- Method: %s\n", r.Method)
+		fmt.Printf("- Target: %s\n", r.RequestTarget)
+		fmt.Printf("- Version: %s\n", r.HttpVersion)
+
 		fmt.Println("connection closed")
 	}
 }
