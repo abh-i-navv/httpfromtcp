@@ -70,6 +70,10 @@ func main() {
 		fmt.Printf("- Method: %s\n", r.Method)
 		fmt.Printf("- Target: %s\n", r.RequestTarget)
 		fmt.Printf("- Version: %s\n", r.HttpVersion)
+		fmt.Printf("Headers:\n")
+		r.Headers.ForEach(func(n, v string) {
+			fmt.Printf("- %s: %s\n", n, v)
+		})
 
 		fmt.Println("connection closed")
 	}
