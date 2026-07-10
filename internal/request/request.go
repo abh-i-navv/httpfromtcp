@@ -6,7 +6,7 @@ import (
 	"io"
 	"strconv"
 
-	"github.com/abh-i-navv/httpfromtcp/headers"
+	"github.com/abh-i-navv/httpfromtcp/internal/headers"
 )
 
 type RequestLine struct {

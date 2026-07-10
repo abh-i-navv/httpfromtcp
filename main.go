@@ -7,7 +7,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/abh-i-navv/httpfromtcp/request"
+	"github.com/abh-i-navv/httpfromtcp/internal/request"
 )
 
 func getLinesChannel(f io.ReadCloser) <-chan string {
