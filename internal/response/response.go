@@ -28,19 +28,16 @@ func GetDefaultHeaders(contentLen int) *headers.Headers {
 }
 
 func WriteHeaders(w io.Writer, h *headers.Headers) error {
-	b := []byte{}
-	h.ForEach(func(n, v string) {
-		b = fmt.Appendf(b, "%s: %s\r\n", n, v)
-	})
-	b = fmt.Append(b, "\r\n")
-	_, err := w.Write(b)
 
-	return err
 }
 
-func WriteStatusLine(w io.Writer, statuscode StatusCode) error {
+type Writer struct {
+	writer io.Writer
+}
+
+func (w *Writer) WriteStatusLine(statusCode StatusCode) error {
 	statusLine := []byte{}
-	switch statuscode {
+	switch statusCode {
 	case StatusOK:
 		statusLine = []byte("HTTP/1.1 200 OK\r\n")
 	case StatusBadRequest:
@@ -50,6 +47,17 @@ func WriteStatusLine(w io.Writer, statuscode StatusCode) error {
 	default:
 		return fmt.Errorf("unrecognised status code")
 	}
-	_, err := w.Write(statusLine)
+	_, err := w.writer.Write(statusLine)
 	return err
 }
+func (w *Writer) WriteHeaders(headers headers.Headers) error {
+	b := []byte{}
+	headers.ForEach(func(n, v string) {
+		b = fmt.Appendf(b, "%s: %s\r\n", n, v)
+	})
+	b = fmt.Append(b, "\r\n")
+	_, err := w.writer.Write(b)
+
+	return err
+}
+func (w *Writer) WriteBody(p []byte) (int, error)
