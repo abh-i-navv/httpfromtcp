@@ -27,12 +27,14 @@ func GetDefaultHeaders(contentLen int) *headers.Headers {
 	return h
 }
 
-func WriteHeaders(w io.Writer, h *headers.Headers) error {
-
-}
-
 type Writer struct {
 	writer io.Writer
+}
+
+func NewWriter(writer io.Writer) *Writer {
+	return &Writer{
+		writer: writer,
+	}
 }
 
 func (w *Writer) WriteStatusLine(statusCode StatusCode) error {
@@ -60,4 +62,8 @@ func (w *Writer) WriteHeaders(headers headers.Headers) error {
 
 	return err
 }
-func (w *Writer) WriteBody(p []byte) (int, error)
+func (w *Writer) WriteBody(p []byte) (int, error) {
+	n, err := w.writer.Write(p)
+
+	return n, err
+}
